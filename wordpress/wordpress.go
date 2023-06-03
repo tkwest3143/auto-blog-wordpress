@@ -18,13 +18,11 @@ type WPResponse struct {
 	ID int `json:"id"`
 }
 
-func PostBlog(content string, siteName string, apiKey string, postUserName string) {
-	// The URL of the WordPress API endpoint
+func PostBlog(title string, content string, siteName string, apiKey string, postUserName string) {
 	url := siteName + "/wp-json/wp/v2/posts"
 
-	// The data to send in the POST request
 	data := map[string]interface{}{
-		"title":   "Your Blog Title",
+		"title":   title,
 		"content": content,
 		"status":  "publish",
 	}
@@ -46,11 +44,9 @@ func PostBlog(content string, siteName string, apiKey string, postUserName strin
 
 	fmt.Println("http status " + resp.Status)
 
-	// Read and return the response
 	body, _ := ioutil.ReadAll(resp.Body)
 	var wpResponse WPResponse
 	json.Unmarshal(body, &wpResponse)
 
-	// Print the ID of the new post
 	fmt.Printf("Posted new blog with ID: %d\n", wpResponse.ID)
 }

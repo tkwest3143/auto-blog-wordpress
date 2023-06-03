@@ -1,0 +1,7 @@
+{
+  "post": {
+    "language": "Japanese",
+    "prompt": "#Operation.\n Write a blog post for me. Generate a blog title and content for the topic: {topic}.\n#conditions \n {conditions}",
+    "conditions": ["At least 100 words of text"]
+  }
+}

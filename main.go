@@ -3,6 +3,7 @@ package main
 import (
 	"auto-blog-wordpress/openai"
 	"auto-blog-wordpress/wordpress"
+	"bufio"
 	"fmt"
 	"os"
 )
@@ -12,14 +13,22 @@ func main() {
 	siteName := os.Getenv("WORDPRESS_SITE_NAME")
 	postUserName := os.Getenv("WORDPRESS_USER_NAME")
 	wordpressKey := os.Getenv("WORDPRESS_API_KEY")
-	fmt.Println(openAIKey)
-	fmt.Println(wordpressKey)
 
-	var topic string
+	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Enter the topic for the blog post:")
-	fmt.Scanln(&topic)
+	topic, _ := reader.ReadString('\n')
 
-	content, _ := openai.GetContent(topic, openAIKey)
+	fmt.Println("Thank you input topic")
+	topicLog := fmt.Sprintf("generating blog for gpt [topic = %s\n]", topic)
+	fmt.Println(topicLog)
+	title, content, err := openai.GetContent(topic, openAIKey)
+	fmt.Println("completing generating blog for gpt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	wordpress.PostBlog(content, siteName, wordpressKey, postUserName)
+	fmt.Println("posting blog")
+	wordpress.PostBlog(title, content, siteName, wordpressKey, postUserName)
+	fmt.Println("complete posting blog")
 }
